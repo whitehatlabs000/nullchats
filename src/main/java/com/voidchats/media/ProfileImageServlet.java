@@ -64,9 +64,12 @@ public class ProfileImageServlet extends HttpServlet {
         }
 
         if (!file.exists() || !file.isFile()) {
-            file = new File(profileDir, "default_profile.jpg");
-            if (!file.exists() || !file.isFile()) {
-                log.error("SYSTEM CONFIG ERROR: Default profile fallback image 'default_profile.jpg' is missing from directory: {}", profileDir);
+            String defaultImagePath = getServletContext().getRealPath("/assets/default_profile.jpg");
+            if (defaultImagePath != null) {
+                file = new File(defaultImagePath);
+            }
+            if (defaultImagePath == null || !file.exists() || !file.isFile()) {
+                log.error("SYSTEM CONFIG ERROR: Default profile fallback image 'default_profile.jpg' is missing from assets directory.");
                 resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Image not found");
                 return;
             }
