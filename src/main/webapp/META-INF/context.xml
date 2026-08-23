@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context>
+    <Resource
+            name="jdbc/PostDB"
+            auth="Container"
+            factory="org.apache.tomcat.jdbc.pool.DataSourceFactory"
+            type="javax.sql.DataSource"
+            driverClassName="com.mysql.cj.jdbc.Driver"
+            url="jdbc:mysql://${DB_HOST:-localhost}:${DB_PORT:-3306}/nullchats?useSSL=false&amp;serverTimezone=UTC&amp;allowPublicKeyRetrieval=true"
+            username="root"
+            password="nullchats*12*"
+            maxTotal="20"
+            maxIdle="10"
+            maxWaitMillis="10000"
+            defaultAutoCommit="true"
+            testOnBorrow="true"
+            validationQuery="SELECT 1"
+            removeAbandoned="true"
+            removeAbandonedTimeout="60"
+    />
+</Context>

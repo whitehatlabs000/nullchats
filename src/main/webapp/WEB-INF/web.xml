@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="https://jakarta.ee/xml/ns/jakartaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee
+                             https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd"
+         version="6.0">
+
+    <!-- JNDI DataSource -->
+    <resource-ref>
+        <description>Base de datos NullChats</description>
+        <res-ref-name>jdbc/PostDB</res-ref-name>
+        <res-type>javax.sql.DataSource</res-type>
+        <res-auth>Container</res-auth>
+    </resource-ref>
+
+    <listener>
+        <listener-class>com.voidchats.AppLifecycleListener</listener-class>
+    </listener>
+
+
+    <filter>
+        <filter-name>SecurityHeadersFilter</filter-name>
+        <filter-class>com.voidchats.filters.SecurityHeadersFilter</filter-class>
+    </filter>
+
+    <filter>
+        <filter-name>BlockedIPFilter</filter-name>
+        <filter-class>com.voidchats.filters.BlockedIPFilter</filter-class>
+    </filter>
+    <filter>
+        <filter-name>RateLimitingFilter</filter-name>
+        <filter-class>com.voidchats.filters.RateLimitingFilter</filter-class>
+    </filter>
+
+    <filter>
+        <filter-name>MaintenanceFilter</filter-name>
+        <filter-class>com.voidchats.filters.MaintenanceFilter</filter-class>
+    </filter>
+
+    <filter>
+        <filter-name>UserStatusFilter</filter-name>
+        <filter-class>com.voidchats.filters.UserStatusFilter</filter-class>
+    </filter>
+
+    <filter>
+        <filter-name>SimpleWaffFilter</filter-name>
+        <filter-class>com.voidchats.filters.SimpleWaffFilter</filter-class>
+    </filter>
+
+    <filter>
+        <filter-name>IPLoggingFilter</filter-name>
+        <filter-class>com.voidchats.filters.IPLoggingFilter</filter-class>
+    </filter>
+
+
+
+    <!-- Cache 1 a -->
+    <filter>
+        <filter-name>ExpiresFilter</filter-name>
+        <filter-class>org.apache.catalina.filters.ExpiresFilter</filter-class>
+
+        <init-param>
+            <param-name>ExpiresByType image</param-name>
+            <param-value>access plus 1 year</param-value>
+        </init-param>
+        <init-param>
+            <param-name>ExpiresByType image/x-icon</param-name>
+            <param-value>access plus 1 year</param-value>
+        </init-param>
+        <init-param>
+            <param-name>ExpiresByType image/vnd.microsoft.icon</param-name>
+            <param-value>access plus 1 year</param-value>
+        </init-param>
+        <init-param>
+            <param-name>ExpiresByType text/css</param-name>
+            <param-value>access plus 1 year</param-value>
+        </init-param>
+        <init-param>
+            <param-name>ExpiresByType application/javascript</param-name>
+            <param-value>access plus 1 year</param-value>
+        </init-param>
+        <init-param>
+            <param-name>ExpiresByType font</param-name>
+            <param-value>access plus 1 year</param-value>
+        </init-param>
+    </filter>
+    <!-- Cache 1 a -->
+
+
+    <filter-mapping>
+        <filter-name>SecurityHeadersFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <filter-mapping>
+        <filter-name>BlockedIPFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <filter-mapping>
+        <filter-name>RateLimitingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <filter-mapping>
+        <filter-name>MaintenanceFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <filter-mapping>
+        <filter-name>UserStatusFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <filter-mapping>
+        <filter-name>SimpleWaffFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <filter-mapping>
+        <filter-name>IPLoggingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+
+    <!-- Cache 1 a -->
+
+    <filter-mapping>
+        <filter-name>ExpiresFilter</filter-name>
+        <url-pattern>/css/*</url-pattern>
+        <url-pattern>/js/*</url-pattern>
+        <url-pattern>/scripts/*</url-pattern>
+        <url-pattern>/assets/*</url-pattern>
+        <url-pattern>/webfonts/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+    </filter-mapping>
+
+    <!-- Cache 1 a -->
+
+
+    <error-page>
+        <error-code>404</error-code>
+        <location>/WEB-INF/jsp/errors/404.jsp</location>
+    </error-page>
+
+    <error-page>
+        <error-code>403</error-code>
+        <location>/WEB-INF/jsp/errors/403.jsp</location>
+    </error-page>
+
+    <error-page>
+        <error-code>429</error-code>
+        <location>/WEB-INF/jsp/errors/429.jsp</location>
+    </error-page>
+
+    <!-- Comentar para pruebas
+
+    <error-page>
+        <error-code>500</error-code>
+        <location>/WEB-INF/jsp/errors/500.jsp</location>
+    </error-page>
+
+    -->
+
+    <error-page>
+        <error-code>401</error-code>
+        <location>/WEB-INF/jsp/errors/401.jsp</location>
+    </error-page>
+
+    <error-page>
+        <error-code>400</error-code>
+        <location>/WEB-INF/jsp/errors/400.jsp</location>
+    </error-page>
+
+    <error-page>
+        <error-code>414</error-code>
+        <location>/WEB-INF/jsp/errors/414.jsp</location>
+    </error-page>
+
+
+    <!-- Comentar para pruebas
+    <error-page>
+        <exception-type>java.lang.Throwable</exception-type>
+        <location>/WEB-INF/jsp/errors/generic.jsp</location>
+    </error-page>
+    -->
+
+</web-app>

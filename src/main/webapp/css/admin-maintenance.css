@@ -1,0 +1,35 @@
+
+:root {
+    --border-radius: 0.75rem !important;
+}
+
+.card {
+    border: none;
+    border-radius: var(--border-radius) !important;
+    transition: box-shadow 0.3s ease;
+    background-color: var(--card-bg-color);
+    border: 1px solid var(--border-color);
+}
+
+[data-bs-theme="light"] .card {
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.05);
+}
+
+[data-bs-theme="dark"] .card {
+    border: 1px solid #333;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.5);
+}
+
+
+[data-bs-theme="dark"] .text-muted {
+    color: var(--secondary-text-dark) !important;
+}
+
+[data-bs-theme="dark"] h2,
+[data-bs-theme="dark"] h3 {
+    color: var(--dark-text);
+}
+
+#main-content-column {
+    padding-top: calc(var(--reservado) + 1.5rem);
+}

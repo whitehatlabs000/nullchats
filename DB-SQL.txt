@@ -1,0 +1,123 @@
+-- =========================================================================
+-- 1. CONFIGURACIÓN INICIAL Y PREPARACIÓN
+-- =========================================================================
+CREATE DATABASE IF NOT EXISTS nullchats;
+USE nullchats;
+
+-- Activar el planificador de eventos (Scheduler)
+SET GLOBAL event_scheduler = ON;
+
+-- =========================================================================
+-- 2. TABLAS DEL SISTEMA
+-- =========================================================================
+
+CREATE TABLE IF NOT EXISTS usuarios (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    tipo ENUM('admin','standard') NOT NULL DEFAULT 'standard',
+    profile_img VARCHAR(255) DEFAULT NULL,
+    cover_img VARCHAR(255) DEFAULT NULL,
+    description TEXT DEFAULT NULL,
+    active TINYINT(1) NOT NULL DEFAULT 1,
+    CONSTRAINT chk_active CHECK (active IN (0, 1))
+);
+
+CREATE TABLE IF NOT EXISTS messages (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    sender_id INT NOT NULL,
+    receiver_id INT NOT NULL,
+    content TEXT NULL,
+    message_type ENUM('TEXT', 'IMAGE', 'VIDEO') NOT NULL DEFAULT 'TEXT',
+    file_path VARCHAR(255) DEFAULT NULL,
+    preview_file VARCHAR(255) DEFAULT NULL,
+    original_filename VARCHAR(255) DEFAULT NULL,
+    is_read TINYINT(1) NOT NULL DEFAULT 0 COMMENT '0: no leído, 1: leído',
+    status VARCHAR(20) NOT NULL DEFAULT 'COMPLETE',
+    processing_error VARCHAR(255) DEFAULT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (sender_id) REFERENCES usuarios(id) ON DELETE CASCADE,
+    FOREIGN KEY (receiver_id) REFERENCES usuarios(id) ON DELETE CASCADE,
+    INDEX idx_messages_conversation (sender_id, receiver_id, created_at DESC)
+);
+
+CREATE TABLE IF NOT EXISTS blocked_users (
+    blocker_id INT NOT NULL,
+    blocked_id INT NOT NULL,
+    PRIMARY KEY (blocker_id, blocked_id),
+    FOREIGN KEY (blocker_id) REFERENCES usuarios(id) ON DELETE CASCADE,
+    FOREIGN KEY (blocked_id) REFERENCES usuarios(id) ON DELETE CASCADE
+);
+
+-- =========================================================================
+-- 3. AUDITORÍA Y LÍMITES DE RANGO
+-- =========================================================================
+
+CREATE TABLE IF NOT EXISTS access_logs (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    event_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    ip_address VARCHAR(45) NOT NULL,
+    username VARCHAR(50),
+    event_type VARCHAR(50) NOT NULL,
+    details VARCHAR(255)
+);
+
+CREATE TABLE IF NOT EXISTS account_creation_logs (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    ip_address VARCHAR(45) NOT NULL,
+    username VARCHAR(50) DEFAULT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    INDEX idx_account_logs_full (username, ip_address, created_at)
+);
+
+CREATE TABLE IF NOT EXISTS message_send_logs (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    sender_id INT NOT NULL,
+    receiver_id INT NOT NULL,
+    message_type ENUM('TEXT', 'IMAGE', 'VIDEO') NOT NULL DEFAULT 'TEXT',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    FOREIGN KEY (sender_id) REFERENCES usuarios(id) ON DELETE CASCADE,
+    FOREIGN KEY (receiver_id) REFERENCES usuarios(id) ON DELETE CASCADE,
+    INDEX idx_sender_type_created (sender_id, message_type, created_at)
+);
+
+CREATE TABLE IF NOT EXISTS password_change_logs (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES usuarios(id) ON DELETE CASCADE,
+    INDEX idx_user_created_passchange (user_id, created_at)
+);
+
+-- =========================================================================
+-- 4. EVENTOS AUTOMÁTICOS
+-- =========================================================================
+DELIMITER $$
+
+DROP EVENT IF EXISTS clean_rate_limit_logs$$
+CREATE EVENT clean_rate_limit_logs
+ON SCHEDULE EVERY 1 DAY STARTS CURRENT_TIMESTAMP
+DO BEGIN
+    DELETE FROM account_creation_logs WHERE created_at < NOW() - INTERVAL 2 DAY;
+    DELETE FROM message_send_logs WHERE created_at < NOW() - INTERVAL 2 DAY;
+    DELETE FROM password_change_logs WHERE created_at < NOW() - INTERVAL 2 DAY;
+END$$
+
+DROP EVENT IF EXISTS clean_audit_logs$$
+CREATE EVENT clean_audit_logs
+ON SCHEDULE EVERY 1 DAY STARTS CURRENT_TIMESTAMP
+DO BEGIN
+    DELETE FROM access_logs WHERE event_timestamp < NOW() - INTERVAL 2 MONTH;
+END$$
+
+DELIMITER ;
+
+-- =========================================================================
+-- 5. USUARIO ADMINISTRADOR POR DEFECTO
+-- =========================================================================
+-- Inserta el usuario admin/admin usando SHA-256 como fallback inicial.
+-- Cambiar la misma al instante, al cambiarla incluye BCrypt por defecto.
+-- La contraseña original es: admin
+INSERT IGNORE INTO usuarios (username, password, tipo, active)
+VALUES ('admin', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', 'admin', 1);

@@ -1,0 +1,279 @@
+/* ==========================
+   --- INICIO GLOBALALES ---
+   ========================== */
+
+
+/* ============================
+       --- INICIO FUENTE ---
+   ============================ */
+
+@font-face {
+    font-display: swap;
+    font-family: 'Inter';
+    src: url('../webfonts/Inter-Regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+}
+@font-face {
+    font-display: swap;
+    font-family: 'Inter';
+    src: url('../webfonts/Inter-Medium.woff2') format('woff2');
+    font-weight: 500;
+    font-style: normal;
+}
+@font-face {
+    font-display: swap;
+    font-family: 'Inter';
+    src: url('../webfonts/Inter-SemiBold.woff2') format('woff2');
+    font-weight: 600;
+    font-style: normal;
+}
+@font-face {
+    font-display: swap;
+    font-family: 'Inter';
+    src: url('../webfonts/Inter-Bold.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+}
+
+:root {
+    --reservado: 64px;
+    --font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+body {
+    font-family: var(--font-family) !important;
+}
+/* =========================
+       --- FIN FUENTE ---
+   ========================= */
+
+
+/* FIX Evita que el navegador ponga un contorno de "focus" a la página entera al volver a ella */
+html, body {
+    outline: none !important;
+}
+
+/* INICIO PREVENIR DESBORDAMIENTO HORIZONTAL */
+
+html, body {
+    max-width: 100%;
+}
+
+/* Esto garantiza una altura mínima para la columna de contenido,
+   solucionando problemas con `position: sticky` en páginas cortas. */
+#main-content-column {
+    min-height: calc(100vh - var(--reservado));
+}
+
+
+/* ==========================================================================
+    --- INICIO ANTI-GLARE GLOBAL: Reduce el brillo total en Modo Claro ---
+   ========================================================================== */
+
+/* Reduce el brillo general SOLO en modo claro */
+[data-bs-theme="light"] body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    /*width: 100vw;*/
+    /*height: 100vh;*/
+    /* Cambiamos 100vw por 100% para que NO pise la barra de desplazamiento lateral */
+    width: 100%;
+    /* 100% en height es más seguro en móviles que 100vh */
+    height: 100%;
+    /* El Truco: Una capa negra con muy baja opacidad (ajusta el 0.05 a tu gusto) */
+    /* Para bajar MÁS el brillo subimos */
+    background-color: rgba(0, 0, 0, 0.05);
+    /* VITAL: pointer-events: none hace que los clics "atraviesen" esta capa.
+       Si no pones esto, la página dejará de funcionar. */
+    pointer-events: none;
+    /* Asegura que esté por encima del contenido normal */
+    z-index: 9999;
+    /* Opcional: 'multiply' oscurece el blanco sin lavar los negros (mantiene el contraste) */
+    /*mix-blend-mode: multiply;*/
+}
+
+/* ==========================================================================
+    --- FIN ANTI-GLARE GLOBAL: Reduce el brillo total en Modo Claro ---
+   ========================================================================== */
+
+/* ===========================================
+   --- INICIO ROOT(movidos de rootcss ---
+   =========================================== */
+
+:root {
+    --primary-color: #0d6efd;
+    --light-bg: #f8f9fa;
+    --dark-bg: #121212;
+    --light-card-bg: #ffffff;
+    --dark-card-bg: #1e1e1e;
+    --light-border: #dee2e6;
+    --dark-border: #343a40;
+    --light-text: #212529;
+    --dark-text: #f8f9fa;
+    --secondary-text-light: #6c757d;
+    --secondary-text-dark: #adb5bd;
+    --border-radius: 1rem; /* 16px */
+}
+
+[data-bs-theme="light"] {
+    --bg-color: var(--light-bg);
+    --card-bg-color: var(--light-card-bg);
+    --text-color: var(--light-text);
+    --secondary-text-color: var(--secondary-text-light);
+    --border-color: var(--light-border);
+    --bg-hover: #e9ecef;
+    --shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.15);
+    --footer-bg: rgba(0, 0, 0, 0.02);
+}
+
+[data-bs-theme="dark"] {
+    --bg-color: var(--dark-bg);
+    --card-bg-color: var(--dark-card-bg);
+    --text-color: var(--dark-text);
+    --secondary-text-color: var(--secondary-text-dark);
+    --border-color: var(--dark-border);
+    --bg-hover: #2c2c2c;
+    --shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.4);
+    --footer-bg: rgba(255, 255, 255, 0.025);
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: background-color 0.3s, color 0.3s;
+}
+
+
+/* ==========================================================================
+           --- INICIO Estilos MODALES IMAGENES (Unificado) ---
+   ========================================================================== */
+
+/* Fondo oscuro semitransparente */
+.modal-backdrop.show {
+    opacity: 0.85;
+}
+
+/* El contenido del modal es transparente y sin sombras propias */
+#imageModal .modal-content {
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+}
+
+/* El cuerpo del modal centra todo */
+#imageModal .modal-body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+}
+
+/* --- LÓGICA DE TAMAÑO INTELIGENTE (Traída de Messaging) --- */
+#imageModal .modal-dialog {
+    /* Puede crecer hasta el 95% del ancho de la pantalla */
+    max-width: 95vw;
+    /* Se encoge para ajustarse al tamaño de la imagen */
+    width: fit-content;
+    margin: 1.75rem auto;
+}
+
+#imageModal #modalImage {
+    /* La imagen nunca superará el ancho de su contenedor */
+    max-width: 100%;
+    /* Y nunca superará el 85% de la altura de la pantalla */
+    max-height: 85vh;
+
+    border-radius: 8px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    object-fit: contain;
+}
+
+/* Botones de navegación redondos y modernos */
+.modal-nav-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50% !important;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.2s ease;
+}
+
+.modal-nav-btn:hover {
+    background-color: rgba(255, 255, 255, 0.25);
+    transform: scale(1.1);
+}
+
+
+/* ==========================================================================
+     --- INICIO CORRECCIONES RESPONSIVAS PARA EL MODAL DE IMAGEN (Moviles) ---
+   ========================================================================== */
+
+/* CORRECCIÓN: Ampliamos la protección hasta 992px (Tablets y Móviles Horizontales) */
+@media (max-width: 991.98px) {
+
+    #imageModal .modal-dialog {
+        /* 1. RESETEO TOTAL: Quitamos márgenes y ocupamos todo el espacio */
+        margin: 0 !important;
+        max-width: 100% !important;
+        width: 100% !important;
+        min-height: 100%; /* Ocupa toda la altura disponible */
+
+        /* 2. FLEXBOX MÁGICO: Esto centra el contenido a la fuerza */
+        display: flex !important;
+        align-items: center !important;     /* Centrado Vertical */
+        justify-content: center !important; /* Centrado Horizontal */
+
+        /* 3. Permitimos clicks a través de las áreas vacías */
+        pointer-events: none;
+    }
+
+    #imageModal .modal-content {
+        /* 4. El contenedor se ajusta a la imagen */
+        width: fit-content !important;
+        /* IMPORTANTE: Dejamos un margen de seguridad de 10px a cada lado */
+        max-width: calc(100% - 20px) !important;
+
+        /* Reactivamos clicks en la imagen/contenido */
+        pointer-events: auto;
+        margin: 0 !important; /* Sin márgenes externos que empujen */
+    }
+
+    #imageModal .modal-body {
+        padding: 0 !important;
+    }
+
+    #imageModal #modalImage {
+        /* 5. La imagen respeta los límites */
+        max-height: 85vh !important;
+        max-width: 100% !important;
+        object-fit: contain;
+    }
+}
+
+/* ==========================================================================
+    --- FIN CORRECCIONES RESPONSIVAS PARA EL MODAL DE IMAGEN (Moviles) ---
+   ========================================================================== */
+
+/* ==========================================================================
+           --- FIN Estilos MODALES IMAGENES (Unificado) ---
+   ========================================================================== */
+
+/* ===========================================
+   --- FIN ROOT ---
+   =========================================== */
+
+/* =========================
+   --- FIN GLOBALALES ---
+   ========================= */
+
+

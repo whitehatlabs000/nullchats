@@ -1,0 +1,448 @@
+:root {
+    --primary-color: #0d6efd;
+
+}
+
+body {
+    display: flex;
+    flex-direction: column; /* Apila la navbar y el chat verticalmente */
+    height: 100vh;         /* Fallback para navegadores antiguos */
+    height: 100dvh;        /* Dynamic Viewport Height (Calcula el alto real restando la barra del navegador y el teclado) */
+    overflow: hidden;      /* Bloquea scroll en X e Y */
+    overscroll-behavior: none; /* Elimina el "efecto rebote" al hacer scroll, que causaba que la navbar se montara */
+}
+
+.main-container {
+    flex-grow: 1;  /* Hace que el contenedor del chat ocupe todo el espacio sobrante */
+    min-height: 0; /* Un truco de Flexbox para que los scrolls internos funcionen correctamente */
+}
+
+
+#sidebar {
+    width: 320px;
+    flex-shrink: 0; /* Evita que la lista de chats se comprima al achicarse el espacio */
+    background-color: var(--bs-body-bg);
+    border-right: 1px solid var(--bs-border-color);
+    overflow-y: auto;
+}
+
+#search-results .list-group-item {
+    border-radius: 0;
+}
+
+#chat-container {
+    background-color: var(--bs-tertiary-bg); /* Un fondo ligeramente diferente */
+    min-width: 0; /* Obliga al contenedor flex a respetar el ancho máximo y no expandirse infinitamente */
+}
+
+#chat-header {
+    background-color: var(--bs-body-bg);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#message-window {
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem; /* Menos espacio entre burbujas */
+    padding: 1rem !important;
+}
+
+.message-wrapper {
+    display: flex;
+    max-width: 70%;
+    margin-bottom: 0.5rem;
+}
+
+.message-bubble {
+    padding: 0.5rem 1rem;
+    border-radius: 1rem;
+    word-wrap: break-word;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+}
+
+
+.message-metadata {
+    float: right;
+    clear: both;
+    margin-left: 10px;
+    font-size: 0.75rem;
+    line-height: 1.5; /* Alinear con el texto */
+}
+
+/* Color de la hora para mensajes enviados */
+.message-wrapper.sent .message-metadata {
+    color: rgba(0, 0, 0, 0.55); /* Texto oscuro semitransparente para fondo claro */
+}
+
+/* Color de la hora para mensajes enviados (Modo Oscuro) */
+[data-bs-theme="dark"] .message-wrapper.sent .message-metadata {
+    color: rgba(255, 255, 255, 0.6); /* Blanco semitransparente para fondo oscuro */
+}
+
+.message-metadata .read-status {
+    margin-left: 4px;
+    font-size: 1rem; /* Hacer el icono un poco mas grande */
+}
+
+.read-status.read {
+    color: #4fc3f7; /* Color azul para leido */
+}
+
+/* Mensajes recibidos (izquierda) */
+.message-wrapper.received {
+    align-self: flex-start;
+}
+.message-wrapper.received .message-bubble {
+    background-color: var(--bs-secondary-bg);
+    color: var(--bs-body-color);
+    border-top-left-radius: 0.25rem;
+}
+.message-wrapper.received .message-metadata {
+    color: var(--bs-secondary-color);
+}
+
+/* Mensajes enviados (derecha) */
+.message-wrapper.sent {
+    align-self: flex-end;
+}
+
+/* Color de burbuja para mensajes enviados */
+.message-wrapper.sent .message-bubble {
+    background-color: #dcf8c6; /* Verde suave */
+    color: #111b21; /* Texto oscuro para contraste perfecto */
+    border-top-right-radius: 0.25rem;
+}
+
+/* Color de burbuja para mensajes enviados (Modo Oscuro) */
+[data-bs-theme="dark"] .message-wrapper.sent .message-bubble {
+    background-color: #005c4b;
+    color: white;
+}
+
+#message-form-container {
+    background-color: var(--bs-body-bg);
+    flex-shrink: 0; /* Evita que el teclado aplaste el contenedor del input */
+    /* FIX MÓVIL: Protege el input de la barra inferior del iPhone, sumándole el padding original (1rem = p-3) */
+    padding-bottom: calc(1rem + env(safe-area-inset-bottom)) !important;
+}
+
+
+.blocked-conversation {
+    background-color: var(--bs-secondary-bg); /* Un fondo ligeramente distinto */
+}
+
+.blocked-conversation:hover {
+    background-color: var(--bs-tertiary-bg);
+
+}
+
+.profile-img {
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.profile-img-sm {
+    width: 40px;
+    height: 40px;
+}
+
+.profile-img-md {
+    width: 45px;
+    height: 45px;
+}
+
+
+.btn-icon {
+    background: transparent;
+    border: none;
+    color: var(--bs-body-color);
+}
+.btn-icon:hover {
+    opacity: 0.7;
+}
+
+/* MENSAJES MULTIMEDIA */
+
+/* Estilo general para las imágenes y videos en el chat */
+.message-media {
+    /* 1. La imagen intentará ocupar el 100% de su burbuja (responsivo) */
+    width: 100%;
+    max-width: 350px;
+
+    /* 2. La altura se ajustará automáticamente según la proporción, */
+    height: auto;
+    /* 3. Pero nunca superará los 450px de altura (límite máximo) */
+    max-height: 450px;
+
+    border-radius: 0.5rem;
+    display: block;
+    object-fit: cover; /* Mantiene la proporción y recorta si es necesario */
+    cursor: pointer;
+}
+
+/* Burbuja especial para contenido multimedia */
+.media-bubble {
+    position: relative; /* Necesario para posicionar los metadatos encima */
+    padding: 0.25rem !important; /* Menos padding para que el medio se ajuste mejor */
+    background-color: transparent !important; /* El fondo lo da la propia media */
+    overflow: hidden; /* Asegura que el contenido respete los bordes redondeados */
+    max-width: fit-content;
+}
+
+/* (hora y estado) sobre la imagen/video */
+.media-bubble .message-metadata {
+    position: absolute; /* Se superpone sobre el contenido */
+    bottom: 8px;
+    right: 8px;
+    background-color: rgba(0, 0, 0, 0.6); /* Fondo semitransparente para legibilidad */
+    color: white;
+    padding: 2px 6px;
+    border-radius: 0.5rem;
+    font-size: 0.75rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px; /* Espacio entre la hora y el icono de check */
+
+    /* solucion adelantar video , para que los metadatos no capten el click */
+    pointer-events: none;
+}
+
+/* Indicador de carga para la vista previa optimista */
+.message-bubble.loading {
+    position: relative;
+}
+
+.message-bubble.loading .message-media {
+    opacity: 0.6; /* El medio se ve semitransparente mientras carga */
+}
+
+.message-bubble.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 2rem;
+    height: 2rem;
+    margin-top: -1rem;
+    margin-left: -1rem;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+/* Animación del spinner */
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Para Mensajes de Texto e Imagenes que se Desbordan */
+
+.message-bubble {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    word-break: break-all;
+    /* Le decimos a la burbuja que su ancho intrínseco no debe impedir que se encoja */
+    min-width: 0;
+}
+
+/* Para Nombres de Usuario Largos (Truncado con "...") */
+
+/* En el Header del Chat Activo */
+#chat-header .flex-grow-1 {
+    /* Le permite al contenedor del nombre encogerse */
+    min-width: 0;
+    overflow: hidden;
+}
+
+#chat-partner-name {
+    word-break: break-word;
+}
+
+/* En la Lista de Chats (Sidebar) y en los Resultados de Busqueda */
+.conversation-item .flex-grow-1,
+#search-results .list-group-item .flex-grow-1 {
+    /* Permite que el contenedor del nombre y último mensaje se encoja */
+    min-width: 0;
+}
+.conversation-item h6,
+#search-results .list-group-item h6 {
+    /* Trunca el nombre de usuario si es demasiado largo */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+/*  ESTILOS PARA MENU HAMBURGUESA  */
+
+
+@media (max-width: 767.98px) {
+
+    /* Posiciona el sidebar fuera de la pantalla por defecto */
+    #sidebar {
+        position: fixed; /* Lo saca del flujo normal para que flote */
+        top: 0;
+        left: 0;
+        bottom: 0;
+        z-index: 1050;
+        transform: translateX(-100%); /* Lo mueve completamente a la izquierda */
+        transition: transform 0.3s ease-in-out; /* animacion suave */
+    }
+
+    /* Clase que se añade con JS para mostrar el sidebar */
+    #sidebar.open {
+        transform: translateX(0); /* Lo regresa a su posición original */
+    }
+
+    /* Estilos para el fondo oscuro cuando el menu está abierto */
+    #sidebar-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 1040; /* Justo debajo del sidebar */
+        opacity: 0;
+        visibility: hidden; /* Oculto y no interactuable por defecto */
+        transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+    }
+
+    /* Clase que se añade con JS para mostrar el fondo oscuro */
+    #sidebar-overlay.active {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    /* Muestra el boton hamburguesa que esta oculto en la version de escritorio */
+    #sidebar-toggle-btn {
+        display: block !important;
+    }
+}
+
+/* FIN: ESTILOS PARA MENU HAMBURGUESA */
+
+
+#conversations-list {
+    /* Hace que la lista crezca para ocupar todo el espacio vertical disponible en la barra lateral. */
+    flex-grow: 1;
+
+    /* Añade una barra de scroll vertical solo si el contenido es más alto que el contenedor. */
+    overflow-y: auto;
+
+    /* Una regla técnica de flexbox para asegurar que se comporte correctamente al encogerse. */
+    min-height: 0;
+}
+
+#refresh-conversations-btn {
+    /* ancho y alto fijos para el boton. */
+    width: 2rem;
+    height: 2rem;
+
+    /* flexbox para centrar perfectamente cualquier cosa dentro del boton. */
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+/* Arregla el texto invisible en conversaciones bloqueadas y activas */
+[data-bs-theme="light"] .conversation-item.blocked-conversation.active h6,
+[data-bs-theme="light"] .conversation-item.blocked-conversation.active p {
+    color: var(--bs-body-color) !important;
+}
+
+
+/*
+ * Estilos para un chat BLOQUEADO que esta ACTIVO (seleccionado)
+ */
+
+
+/* Define el aspecto base cuando está seleccionado (sin hover) */
+.conversation-item.active.blocked-conversation {
+    background-color: var(--bs-tertiary-bg); /* Usamos un gris un poco más claro para distinguirlo */
+    border: 1px solid var(--primary-color);  /* Borde azul que indica "seleccionado" */
+    box-shadow: none;
+}
+
+/* Define el aspecto al pasar el mouse por encima (hover) */
+.conversation-item.active.blocked-conversation:hover {
+    background-color: var(--bs-tertiary-bg); /* Mantenemos el fondo para evitar cambios bruscos */
+    border-color: var(--primary-color);
+    box-shadow: none;
+}
+
+
+/*
+ * ESTILO PARA CHATS NORMALES SELECCIONADOS
+ */
+
+/* Para el tema claro */
+[data-bs-theme="light"] .conversation-item.active:not(.blocked-conversation) {
+    background-color: #cce5ff;  /* Un celeste claro y suave */
+    border-color: #b8daff;      /* Un borde que complementa el fondo */
+    color: #004085;             /* Texto azul oscuro para máxima legibilidad */
+}
+[data-bs-theme="light"] .conversation-item.active:not(.blocked-conversation) h6,
+[data-bs-theme="light"] .conversation-item.active:not(.blocked-conversation) p {
+    color: #004085; /* Aseguramos que el texto dentro herede el color */
+}
+
+
+/* Para el tema oscuro */
+[data-bs-theme="dark"] .conversation-item.active:not(.blocked-conversation) {
+    background-color: #2c4f6b;  /* Un equivalente de "celeste" para fondos oscuros */
+    border-color: #3b5e7a;      /* Borde sutil pero visible */
+    color: #fff;                /* Texto blanco para buen contraste */
+}
+
+/*
+ * MODAL DE USUARIOS BLOQUEADOS
+ */
+
+/* Arregla el desbordamiento de nombres de usuario largos */
+#blocked-users-list-container .flex-grow-1 {
+    min-width: 0;              /* Permite que el contenedor del nombre se encoja */
+    overflow-wrap: break-word; /* Fuerza el quiebre de palabras muy largas */
+}
+
+
+/* Inicio Estilos para el contenedor de la vista previa del video */
+
+.video-preview-container {
+    position: relative;
+    cursor: pointer;
+    background-size: cover;
+    background-position: center;
+    background-color: #000; /* Fondo negro por si falla la imagen o no existe */
+    border-radius: 10px; /* Mismo borde que las imágenes */
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 150px; /* Altura mínima para que no se vea mal */
+    aspect-ratio: 16 / 9; /* Mantiene una proporción de video estándar */
+    max-width: 320px; /* Limita el ancho máximo */
+}
+
+/* Estilos para el ícono de "play" */
+.video-play-icon {
+    font-size: 3.5rem; /* Tamaño del ícono */
+    color: rgba(255, 255, 255, 0.85); /* Color blanco semi-transparente */
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Sombra para mejor visibilidad */
+    transition: transform 0.2s ease-in-out;
+}
+
+/* Efecto hover sobre el contenedor */
+.video-preview-container:hover .video-play-icon {
+    transform: scale(1.1);
+    color: white;
+}
+
+/* Fin Estilos para el contenedor de la vista previa del video */

@@ -1,0 +1,277 @@
+/* Contenedor principal del widget, fijo en la esquina inferior derecha */
+#chat-widget-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1050;
+}
+
+/* Botón flotante para abrir el chat */
+#chat-toggle-btn {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.2s ease-in-out;
+}
+
+#chat-toggle-btn .bi-x-lg {
+    display: none;
+}
+
+/* Cuando la ventana está abierta, el botón se transforma en una 'X' */
+#chat-toggle-btn.open .bi-chat-dots-fill {
+    display: none;
+}
+#chat-toggle-btn.open .bi-x-lg {
+    display: inline;
+}
+
+
+/* La ventana de chat principal */
+#chat-window {
+    position: absolute;
+    bottom: 75px; /* Un poco por encima del botón */
+    right: 0;
+    width: 350px;
+    max-width: 90vw;
+    height: 500px;
+    max-height: 75vh;
+    background-color: var(--bs-body-bg);
+    border: 1px solid var(--bs-border-color);
+    border-radius: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+
+    /* Animación de entrada/salida */
+    transform: scale(0.95) translateY(10px);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.2s ease-in-out;
+    transform-origin: bottom right;
+}
+
+/* Estilo para cuando la ventana está visible */
+#chat-window.open {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+    visibility: visible;
+}
+
+#widget-header .btn-icon {
+    background: none;
+    border: none;
+    padding: 0.2rem 0.5rem;
+    color: var(--bs-secondary-color);
+}
+
+/* Cuerpo del widget, donde se muestran conversaciones o mensajes */
+#widget-body {
+    flex-grow: 1;
+    overflow-y: auto;
+    position: relative;
+}
+
+/* Las dos vistas internas del widget */
+#widget-conversations-list,
+#widget-message-window {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    background-color: var(--bs-body-bg);
+}
+
+#widget-message-window .message-wrapper {
+    margin-bottom: 5px;
+    display: flex;
+}
+#widget-message-window .message-wrapper.sent {
+    justify-content: flex-end;
+}
+#widget-message-window .message-bubble {
+    padding: 6px 12px;
+    border-radius: 18px;
+    max-width: 80%;
+    word-wrap: break-word;
+    font-size: 0.9rem;
+}
+/* Color de burbuja para mensajes enviados (Modo Claro) */
+#widget-message-window .message-wrapper.sent .message-bubble {
+    background-color: #dcf8c6; /* Verde suave */
+    color: #111b21; /* Texto oscuro para contraste perfecto */
+}
+
+/* Color de burbuja enviados modo oscuro */
+[data-bs-theme="dark"] #widget-message-window .message-wrapper.sent .message-bubble {
+    background-color: #005c4b;
+    color: white;
+}
+
+#widget-message-window .message-wrapper.received .message-bubble {
+    background-color: var(--bs-secondary-bg);
+}
+#widget-message-window .message-metadata {
+    font-size: 0.7rem;
+    opacity: 0.8;
+    margin-left: 8px;
+    display: block;
+    text-align: right;
+    margin-top: 2px;
+}
+
+/* --- INICIO: Estilos para el estado de los mensajes --- */
+
+/* Estilo para la hora y estado en mensajes enviados -Modo Claro */
+#widget-message-window .message-wrapper.sent .message-metadata {
+    color: rgba(0, 0, 0, 0.55); /* Texto oscuro semitransparente para fondo claro */
+}
+
+/* Estilo hora y estado enviados - modo oscuro */
+[data-bs-theme="dark"] #widget-message-window .message-wrapper.sent .message-metadata {
+    color: rgba(255, 255, 255, 0.7);
+}
+/* Hace el ícono un poco más grande y visible */
+#widget-message-window .read-status {
+    font-size: 1rem;
+    vertical-align: text-bottom; /* Alinea el ícono con la hora */
+}
+
+/* Colorea el tick de azul/cian cuando el mensaje ha sido leído */
+#widget-message-window .read-status.read {
+    color: #4fc3f7;
+}
+
+/* --- FIN: Estilos para el estado de los mensajes --- */
+
+/* --- INICIO: Estilos para la imagen de perfil --- */
+
+.profile-img {
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.profile-img-sm {
+    width: 40px;
+    height: 40px;
+}
+
+/* --- FIN: Estilos para la imagen de perfil --- */
+
+/* --- ESTILOS PARA MODAL DE USUARIOS BLOQUEADOS --- */
+
+#blocked-users-list-container .flex-grow-1 {
+    min-width: 0;
+    overflow-wrap: break-word;
+    word-break: break-word;
+}
+
+/* --- ESTILOS PARA RESULTADOS DE BÚSQUEDA --- */
+
+/* Quita los bordes redondeados de los ítems para que parezcan una lista continua */
+#widget-search-results .list-group-item {
+    border-radius: 0;
+}
+
+/* Permite que el contenedor del nombre de usuario se encoja correctamente */
+#widget-search-results .list-group-item .flex-grow-1 {
+    min-width: 0;
+}
+
+/* Trunca los nombres de usuario largos */
+#widget-search-results .list-group-item h6 {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+/* Estilos para el contenedor de la vista previa del video */
+
+/* Clase genérica para todos los medios en los mensajes */
+.widget-message-media {
+    max-width: 100%;
+    border-radius: 8px;
+    display: block;
+}
+
+
+/* Estilos para el contenedor de la vista previa del video */
+
+.video-preview-container {
+    position: relative;
+    cursor: pointer;
+    background-size: cover;
+    background-position: center;
+    background-color: #000; /* Fondo negro por si falla la imagen o no existe */
+    border-radius: 10px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 150px;
+    aspect-ratio: 16 / 9;
+    max-width: 320px;
+}
+
+/* Estilos para el ícono de "play" */
+.video-play-icon {
+    font-size: 3.5rem; /* Tamaño del ícono */
+    color: rgba(255, 255, 255, 0.85); /* Color blanco semi-transparente */
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Sombra para mejor visibilidad */
+    transition: transform 0.2s ease-in-out;
+}
+
+/* Efecto hover sobre el contenedor */
+.video-preview-container:hover .video-play-icon {
+    transform: scale(1.1);
+    color: white;
+}
+
+/* Estilos para el contenedor de la vista previa del video */
+
+/* Inicio Estilos para burbujas que contienen multimedia */
+#widget-message-window .message-bubble.media-bubble {
+    padding: 0;
+    overflow: hidden;
+}
+
+/* Ajuste para que los metadatos se superpongan en la multimedia */
+.media-bubble {
+    position: relative;
+}
+
+#widget-message-window .media-bubble .message-metadata {
+    position: absolute;
+    bottom: 4px;
+    right: 8px;
+    background-color: rgba(0, 0, 0, 0.5); /* Fondo semitransparente para legibilidad */
+    color: white;
+    padding: 2px 6px;
+    border-radius: 10px;
+    margin: 0;
+    pointer-events: none;
+}
+
+/* Fin Estilos para burbujas que contienen multimedia */
+
+
+/* --- inicio insignia de mensajes no leidos --- */
+#widget-unread-badge {
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translate(15%, -15%); /* Lo mueve ligeramente afuera para que luzca como burbuja, pero no lo suficiente para salir de la pantalla */
+    border: 2px solid var(--bs-body-bg); /* Le da un borde del color del fondo para separarlo visualmente del botón azul */
+    font-size: 0.7rem;
+    padding: 0.35em 0.5em;
+    min-width: 20px; /* Para que los numeros de un digito sigan siendo un circulo perfecto */
+    text-align: center;
+}
+/* --- fin insignia de mensajes no leidos --- */

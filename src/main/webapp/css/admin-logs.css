@@ -1,0 +1,208 @@
+:root {
+    --border-radius: 0.75rem !important;
+}
+
+[data-bs-theme="light"] {
+    --bg-color: #f0f2f5;
+}
+
+
+/* --- Tarjetas --- */
+.card {
+    border: none;
+    border-radius: 0 !important;
+    transition: box-shadow 0.3s ease;
+    background-color: var(--card-bg-color);
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+}
+
+[data-bs-theme="light"] .card {
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.05);
+}
+
+[data-bs-theme="dark"] .card {
+    border: 1px solid #333;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.5);
+}
+
+/* --- Inputs --- */
+[data-bs-theme="dark"] .card .form-control,
+[data-bs-theme="dark"] .card .form-select {
+    background-color: #2c2c2c;
+    border-color: #444;
+    color: #e0e0e0;
+}
+[data-bs-theme="dark"] .card .form-control:focus,
+[data-bs-theme="dark"] .card .form-select:focus {
+    background-color: #333;
+    border-color: #0d6efd;
+    color: #fff;
+}
+[data-bs-theme="dark"] .card label.form-label {
+    color: #adb5bd;
+}
+
+/* --- Tablas --- */
+/* Anchos de columna fijos (funcionan bien gracias al min-width de arriba) */
+.table th:nth-child(1), .table td:nth-child(1) { width: 170px; } /* Timestamp */
+.table th:nth-child(2), .table td:nth-child(2) { width: 130px; } /* IP */
+.table th:nth-child(3), .table td:nth-child(3) { width: 140px; } /* Username */
+.table th:nth-child(4), .table td:nth-child(4) { width: 150px; } /* Event */
+
+/* Detalles */
+.table td:nth-child(5) {
+    white-space: normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-word;
+}
+
+.table td {
+    vertical-align: middle;
+}
+
+/* Colores de Tabla */
+[data-bs-theme="dark"] .table { color: #e0e0e0; border-color: #333; }
+[data-bs-theme="dark"] .table-light, [data-bs-theme="dark"] .table-light th {
+    background-color: #2c2c2c !important; color: #adb5bd !important; border-color: #444;
+}
+[data-bs-theme="dark"] .table-striped > tbody > tr:nth-of-type(odd) > * {
+    background-color: rgba(255, 255, 255, 0.03);
+}
+
+/* --- Loading Overlay --- */
+#loadingIndicator {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(255, 255, 255, 0.8);
+    display: none; justify-content: center; align-items: center; z-index: 10;
+    backdrop-filter: blur(2px);
+    
+}
+[data-bs-theme="dark"] #loadingIndicator { background: rgba(0, 0, 0, 0.7); }
+
+/* --- Paginación --- */
+.pagination { flex-wrap: wrap; }
+[data-bs-theme="dark"] .page-link { background-color: #1e1e1e; border-color: #333; color: #e0e0e0; }
+[data-bs-theme="dark"] .page-item.active .page-link { background-color: #0d6efd; border-color: #0d6efd; color: #fff; }
+[data-bs-theme="dark"] .page-item.disabled .page-link { background-color: #2c2c2c; border-color: #333; color: #6c757d; }
+
+/* ALINEACIÓN DEL CONTENIDO PRINCIPAL */
+
+@media (min-width: 992px) {
+    #main-content-column {
+        padding-top: calc(var(--reservado) - 1rem);
+    }
+}
+
+/* En pantallas PEQUEÑAS (Móviles/Tablets), usamos un padding normal. */
+
+@media (max-width: 991px) {
+    #main-content-column {
+        padding-top: 1.5rem; /* Espaciado estándar */
+    }
+}
+
+
+/* INICIO RESPONSIVE CARD TABLES (Solo para pantallas móviles) */
+
+@media (max-width: 767.98px) {
+    /* Desactivar cualquier scroll horizontal remanente */
+    .table-responsive {
+        overflow-x: visible;
+        border: none;
+    }
+
+    /* Anular el table-layout: fixed en móviles para que las tarjetas fluyan libres */
+    .table-responsive .table.responsive-admin-logs-table {
+        min-width: 100%;
+        table-layout: auto;
+    }
+
+    /* Convertir la tabla y sus elementos en bloques */
+    .responsive-admin-logs-table,
+    .responsive-admin-logs-table tbody,
+    .responsive-admin-logs-table tr,
+    .responsive-admin-logs-table td {
+        display: block;
+        width: 100% !important; /* Esto anula los anchos fijos (130px, 170px) de la versión PC */
+    }
+
+    /* Ocultar visualmente la cabecera (pero mantenerla) */
+    .responsive-admin-logs-table thead {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+
+    /* Quitar el color de fondo alterno en móviles para que no se vea como un cebra raro */
+    [data-bs-theme="dark"] .responsive-admin-logs-table.table-striped > tbody > tr:nth-of-type(odd) > * {
+        background-color: transparent;
+    }
+
+    [data-bs-theme="light"] .responsive-admin-logs-table.table-striped > tbody > tr:nth-of-type(odd) > * {
+        background-color: transparent;
+    }
+
+    /* Diseñar cada FILA como si fuera una Tarjeta */
+    .responsive-admin-logs-table tr {
+        border: 1px solid var(--border-color);
+        border-radius: 0.5rem;
+        margin-bottom: 1.5rem;
+        background-color: var(--card-bg-color);
+        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.05);
+        padding: 0.5rem 0;
+    }
+
+    [data-bs-theme="dark"] .responsive-admin-logs-table tr {
+        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.3);
+    }
+
+    /* Diseñar cada CELDA como una fila interna de la tarjeta */
+    .responsive-admin-logs-table td[data-label] {
+        border: none;
+        border-bottom: 1px solid var(--border-color);
+        position: relative;
+        padding-left: 45% !important; /* Aumentamos el espacio para que la etiqueta y el texto no choquen */
+        text-align: right;
+        min-height: 2.5rem;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+    }
+
+    /* Quitar el borde de la última celda de la tarjeta */
+    .responsive-admin-logs-table td[data-label]:last-child {
+        border-bottom: 0;
+    }
+
+    /* INYECTAR LAS ETIQUETAS usando los data-label del HTML */
+    .responsive-admin-logs-table td[data-label]::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 1rem;
+        width: 40%; /* Aumentamos el ancho de la etiqueta para que entre "IP ADDRESS" completo */
+        white-space: nowrap;
+        text-align: left;
+        font-weight: 700;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        color: var(--bs-secondary);
+    }
+
+    /* La celda de "Detalles" a veces es súper larga, la mostramos debajo del título */
+    .responsive-admin-logs-table td[data-label].details-cell {
+        flex-direction: column;
+        align-items: flex-start;
+        text-align: left;
+        padding-left: 1rem !important;
+        padding-top: 2.2rem !important; /* Deja espacio arriba para el ::before */
+    }
+
+    .responsive-admin-logs-table td[data-label].details-cell::before {
+        top: 0.75rem;
+        width: calc(100% - 2rem);
+    }
+}
+
+/* FIN RESPONSIVE CARD TABLES (Solo para pantallas móviles) */

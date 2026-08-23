@@ -1,0 +1,106 @@
+:root {
+    --primary-color: #0d6efd;
+    --light-bg: #f8f9fa;
+    --dark-bg: #121212;
+    --light-text: #212529;
+    --dark-text: #f8f9fa;
+    --font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+[data-bs-theme="light"] {
+    --bg-color: var(--light-bg);
+    --text-color: var(--light-text);
+    --secondary-text-color: #6c757d;
+}
+
+[data-bs-theme="dark"] {
+    --bg-color: var(--dark-bg);
+    --text-color: var(--dark-text);
+    --secondary-text-color: #adb5bd;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: var(--font-family);
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* Layout del Error */
+.error-page-container {
+    min-height: calc(100vh - 80px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 2rem;
+}
+
+/* Tipografía y Estilos Visuales */
+.error-code {
+    font-size: 8rem;
+    font-weight: 900;
+    line-height: 1;
+    margin-bottom: 0;
+    letter-spacing: -5px;
+
+    /* Efecto de gradiente para el texto */
+    background: linear-gradient(135deg, var(--bs-primary) 0%, var(--bs-info) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
+
+    /* Sombra sutil para darle profundidad */
+    text-shadow: 0px 10px 20px rgba(13, 110, 253, 0.15);
+}
+
+.error-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    color: var(--secondary-text-color);
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+}
+
+.error-title {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-top: 1rem;
+    color: var(--text-color);
+}
+
+.error-description {
+    font-size: 1.1rem;
+    color: var(--secondary-text-color);
+    max-width: 500px;
+    margin: 1rem auto 2.5rem auto;
+}
+
+/* Ajustes para Modo Oscuro */
+[data-bs-theme="dark"] .error-code {
+    text-shadow: 0px 10px 20px rgba(0, 0, 0, 0.5);
+}
+
+/* Ajustes Responsivos (Moviles) */
+@media (max-width: 576px) {
+    .error-code {
+        font-size: 6rem;
+    }
+    .error-icon {
+        font-size: 3rem;
+    }
+    .error-title {
+        font-size: 1.5rem;
+    }
+    .error-description {
+        font-size: 1rem;
+        padding: 0 1rem;
+    }
+}

@@ -1,0 +1,128 @@
+:root {
+    --bg-color-dark: #0a0a0c;
+    --card-bg: rgba(20, 20, 22, 0.6);
+    --primary-glow: rgba(13, 110, 253, 0.4);
+}
+
+body.index-body {
+    background-color: var(--bg-color-dark);
+    color: #e0e0e0;
+    margin: 0;
+    overflow: hidden; /* Esto es clave para el efecto de "App Native" (sin barras de scroll) */
+    font-family: system-ui, -apple-system, sans-serif;
+}
+
+/* =========================================
+   Fondo Inmersivo Animado
+   ========================================= */
+.bg-animation {
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    z-index: 0;
+    overflow: hidden;
+    background: radial-gradient(circle at center, #121216 0%, #0a0a0c 100%);
+}
+
+.glow-orb {
+    position: absolute;
+    width: 40vw;
+    height: 40vw;
+    background: var(--primary-glow);
+    border-radius: 50%;
+    filter: blur(100px);
+    animation: float 20s infinite ease-in-out alternate;
+    opacity: 0.5;
+    top: -10%;
+    left: -10%;
+}
+
+.glow-orb.orb-2 {
+    background: rgba(111, 66, 193, 0.3); /* Un toque purpura sutil */
+    top: auto; bottom: -10%;
+    left: auto; right: -10%;
+    animation-delay: -10s;
+}
+
+@keyframes float {
+    0% { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(10%, 10%) scale(1.2); }
+}
+
+/* =========================================
+   Tarjeta Central (Glassmorphism)
+   ========================================= */
+.splash-card {
+    background: var(--card-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 2rem;
+    width: 90%;
+    max-width: 500px;
+    transform: translateY(20px);
+    opacity: 0;
+    /* Animación de entrada suave */
+    animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fadeUp {
+    to { transform: translateY(0); opacity: 1; }
+}
+
+/* =========================================
+   Branding y Textos
+   ========================================= */
+.brand-logo {
+    font-size: 4rem;
+    line-height: 1;
+    filter: drop-shadow(0 0 15px var(--primary-glow));
+}
+
+.brand-title {
+    /* clamp() hace la fuente fluida: Mínimo 2rem, ideal 10vw (10% del ancho de la pantalla), Máximo 3rem */
+    font-size: clamp(2rem, 10vw, 3rem);
+    letter-spacing: -1px;
+    background: linear-gradient(135deg, #ffffff 0%, #adb5bd 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Enlace About discreto */
+.about-link {
+    opacity: 0.6;
+    transition: opacity 0.2s ease, color 0.2s ease;
+}
+
+.about-link:hover {
+    opacity: 1;
+    color: #0d6efd !important;
+}
+
+/* Contenedor fijo para que la tarjeta no salte al borrar texto */
+.tagline-container {
+    height: 2rem;
+}
+
+.cursor {
+    display: inline-block;
+    width: 10px;
+    animation: blink 1s step-end infinite;
+    color: #0d6efd;
+    font-weight: bold;
+}
+
+@keyframes blink { 50% { opacity: 0; } }
+
+/* =========================================
+   Botón de Acción (Launch)
+   ========================================= */
+.launch-btn {
+    transition: all 0.3s ease;
+    box-shadow: 0 0 20px rgba(13, 110, 253, 0.3);
+    letter-spacing: 0.5px;
+}
+
+.launch-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 30px rgba(13, 110, 253, 0.6);
+}

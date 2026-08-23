@@ -1,0 +1,42 @@
+# =========================
+# NullChats Git Ignore Rules
+# =========================
+
+# --- Compilación ---
+target/
+build/
+!.mvn/wrapper/maven-wrapper.jar
+
+# --- IntelliJ IDEA ---
+.idea/
+*.iws
+*.iml
+*.ipr
+
+# --- VS Code & Eclipse & NetBeans ---
+.vscode/
+.settings/
+.classpath
+.project
+.factorypath
+.apt_generated
+.springBeans
+.sts4-cache
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+# --- Datos de Base de Datos y Archivos Locales ---
+mysql-data/
+data/
+uploads/
+
+# --- Sistema Operativo ---
+.DS_Store
+Thumbs.db
+
+# Node y Frontend Assets
+node/
+node_modules/

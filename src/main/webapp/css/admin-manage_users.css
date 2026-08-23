@@ -1,0 +1,146 @@
+:root {
+    --border-radius: 0.75rem !important;
+}
+
+
+/*  Formulario Busqueda */
+#searchFormContainer {
+    width: 100%;
+    background-color: var(--card-bg-color);
+    border: 1px solid var(--border-color);
+    border-radius: 1rem;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+/* Input integrado con icono */
+#searchFormContainer .input-group-text {
+    color: var(--secondary-text-color);
+}
+#searchFormContainer .form-control:focus {
+    box-shadow: none;
+    border-color: var(--border-color);
+}
+/* Focus en el grupo completo para efecto visual */
+#searchFormContainer .input-group:focus-within {
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+    border-radius: 0.375rem;
+}
+
+/* Tarjetas de Usuario */
+.user-card {
+    background-color: var(--card-bg-color);
+    border: 1px solid var(--border-color);
+    border-radius: 1rem;
+    margin-bottom: 1rem;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.user-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+}
+
+[data-bs-theme="dark"] .user-card:hover {
+    box-shadow: 0 8px 15px rgba(0,0,0,0.3);
+}
+
+/* Layout interno de la tarjeta */
+.user-card-body {
+    display: flex;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    gap: 1rem;
+}
+
+/* Avatar circular */
+.user-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--border-color);
+}
+
+/* Info del usuario */
+.user-info {
+    flex-grow: 1;
+    min-width: 0;
+}
+.user-info h5 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+.user-info .stats {
+    font-size: 0.85rem;
+    color: var(--secondary-text-color);
+}
+
+/* Estado (Badge) */
+.user-status .badge {
+    border-radius: 50px;
+    padding: 0.5em 1em;
+    font-weight: 500;
+}
+
+/* Botones de Acción Circulares */
+.user-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+/* Agregamos .user-actions delante para no afectar al widget de chat */
+.user-actions .btn-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    background-color: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--secondary-text-color);
+    cursor: pointer;
+}
+
+.user-actions .btn-icon:hover {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transform: scale(1.1);
+}
+
+/* Colores específicos para acciones */
+.user-actions .btn-icon.delete:hover {
+    background-color: rgba(220, 53, 69, 0.1);
+    border-color: #dc3545;
+    color: #dc3545;
+}
+.user-actions .btn-icon.edit:hover {
+    background-color: rgba(255, 193, 7, 0.1);
+    border-color: #ffc107;
+    color: #ffc107;
+}
+.user-actions .btn-icon.profile:hover {
+    background-color: rgba(13, 110, 253, 0.1);
+    border-color: #0d6efd;
+    color: #0d6efd;
+}
+
+/* Responsive: En móviles, apilar contenido */
+@media (max-width: 576px) {
+    .user-card-body {
+        flex-direction: column;
+        text-align: center;
+    }
+    .user-actions {
+        width: 100%;
+        justify-content: center;
+        margin-top: 0.5rem;
+    }
+}
+
+
+#main-content-column {
+    padding-top: calc(var(--reservado) - 1rem);
+}

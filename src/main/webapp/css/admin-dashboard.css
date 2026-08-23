@@ -1,0 +1,103 @@
+:root {
+    --primary-color: #0d6efd;
+    --border-radius: 0.75rem; /* 12px */
+    --card-hover-transform: translateY(-5px);
+}
+
+[data-bs-theme="light"] body { background-color: #f0f2f5; color: #212529; }
+[data-bs-theme="dark"] body { background-color: #121212; color: #e0e0e0; }
+
+/* --- Dashboard Cards --- */
+.dashboard-card {
+    border: none;
+    border-radius: var(--border-radius) !important;
+    transition: all 0.3s ease;
+    text-decoration: none !important;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Barra lateral de color */
+.dashboard-card::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background-color: var(--primary-color);
+    opacity: 0.7;
+    transition: width 0.3s ease;
+}
+
+.dashboard-card:hover::before {
+    width: 6px;
+    opacity: 1;
+}
+
+/* Estilos Modo Claro */
+[data-bs-theme="light"] .dashboard-card {
+    background-color: #ffffff;
+    color: #212529;
+    border: 1px solid #dee2e6;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.05);
+}
+[data-bs-theme="light"] .dashboard-card:hover {
+    transform: var(--card-hover-transform);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+    border-color: var(--primary-color);
+}
+
+/* Estilos Modo Oscuro */
+[data-bs-theme="dark"] .dashboard-card {
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+    border: 1px solid #333;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.5);
+}
+[data-bs-theme="dark"] .dashboard-card:hover {
+    transform: var(--card-hover-transform);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.5);
+    background-color: #252525;
+    border-color: #555;
+}
+
+/* --- Iconos y Tipografía --- */
+.card-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: var(--primary-color);
+    transition: transform 0.3s ease;
+}
+
+.dashboard-card:hover .card-icon {
+    transform: scale(1.1);
+}
+
+.card-title {
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+}
+
+/* Texto descriptivo pequeño */
+[data-bs-theme="dark"] .text-secondary {
+    color: #adb5bd !important;
+}
+
+/* --- Categorías de Color --- */
+/* Security Group (Rojo) */
+.card-security::before { background-color: #dc3545; }
+.card-security .card-icon { color: #dc3545; }
+[data-bs-theme="light"] .card-security:hover { border-color: #dc3545; }
+
+/* Management (Verde) */
+.card-manage::before { background-color: #198754; }
+.card-manage .card-icon { color: #198754; }
+[data-bs-theme="light"] .card-manage:hover { border-color: #198754; }
+
+/* Analytics Group (Azul/Purple) */
+.card-analytics::before { background-color: #6f42c1; }
+.card-analytics .card-icon { color: #6f42c1; }
+[data-bs-theme="light"] .card-analytics:hover { border-color: #6f42c1; }
